@@ -8,3 +8,8 @@ Hardware componenets needed
   5. Relay module
   6. Analog/Digital multiplexer - CD74HC4067
   7. Shift Register - SN74HC595N
+
+For the full schematic and how to go about building, read through:
+<ARDUINO PROJECT HUB LINK>
+  
+  
