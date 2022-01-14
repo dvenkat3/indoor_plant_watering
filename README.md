@@ -1,2 +1,10 @@
 # indoor_plant_watering
-Arduino code for watering indoor plants
+
+Hardware componenets needed
+  1. Arduino Uno
+  2. Mini water pumps
+  3. Soil moisture sensor
+  4. Water level sensor
+  5. Relay module
+  6. Analog/Digital multiplexer - CD74HC4067
+  7. Shift Register - SN74HC595N
