@@ -13,3 +13,6 @@ For the full schematic and how to go about building, read through:
 <ARDUINO PROJECT HUB LINK>
   
   
+How to compile:
+  1. After donwloading the repository, move only the foulders to path <path>/Arduino/libraries/
+  2. 
