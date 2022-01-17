@@ -17,4 +17,8 @@ How to compile:
   2. Move files, CLASS_PLANT.h, plantWatering_config.h and Plant_Watering_project.ino, to path <YYOUR PC PATH>/Arduino/<YOUR PROJECT NAME>
   3. Open Plant_Watering_project.ino and hit the compile button and your all good to program the controller
 
-For more additions and changes, read through file MORE_INFO.docx
+For more additions and changes, read through file MORE_INFO.docx. Has info on what to do for the following
+  1. Adding a new plant
+  2. Using a different relay board
+  3. Using a different moisture sensor
+  4. Calibrating the moisutre sensor
