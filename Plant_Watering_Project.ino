@@ -41,6 +41,14 @@ PLANT leafy (LEAFY_MOIST_LED,
              LEAFY_PUMP, LEAFY_PUMP_ON_DURATION_MS, LEAFY_SOIL_SOAK_DURATION_MS,
              LEAFY_EEPROM_ADDR_BEGIN, LEAFY_EEPROM_ADDR_END);
 
+//ADDING A NEW PLANT
+/*
+PLANT new_plant (NEW_PLANT_MOIST_LED, 
+                 NEW_PLANT_MOIST_LEVEL_SEN, &A0_in, NEW_PLANT_MOIST_LEVEL_SEN_UC_IN, NEW_PLANT_MOIST_LEVEL_LWM, NEW_PLANT_MOIST_LEVEL_HWM,
+                 NEW_PLANT_PUMP, NEW_PLANT_PUMP_ON_DURATION_MS, NEW_PLANT_SOIL_SOAK_DURATION_MS,
+                 NEW_PLANT_EEPROM_ADDR_BEGIN, NEW_PLANT_EEPROM_ADDR_END);
+*/
+
 unsigned long last_log_mills;
 
 void setup() {
@@ -55,6 +63,8 @@ void setup() {
   alovera.moist_level_led->off();
   anthu.moist_level_led->off();
   leafy.moist_level_led->off();
+  //ADDING A NEW PLANT
+  //new_plant.moist_level_led->off();
   
   bitWrite(sr_data, FIRST_PLANT_MOIST_LED, first_plant.moist_level_led->get_state());
   bitWrite(sr_data, FIRST_PLANT_PUMP, first_plant.pump->get_state());
@@ -64,6 +74,11 @@ void setup() {
   bitWrite(sr_data, ANTHU_PUMP, first_plant.pump->get_state());
   bitWrite(sr_data, LEAFY_MOIST_LED, alovera.moist_level_led->get_state());
   bitWrite(sr_data, LEAFY_PUMP, alovera.pump->get_state());
+  //ADDING A NEW PLANT
+  /*
+  //bitWrite(sr_data, NEW_PLANT_MOIST_LED, new_plant.moist_level_led->get_state());
+  //bitWrite(sr_data, NEW_PLANT_PUMP, new_plant.pump->get_state());
+  */
   sr1.latch_data();
   
   delay(1000);
@@ -74,6 +89,10 @@ void setup() {
   alovera.moist_level_led->on();
   anthu.moist_level_led->on();
   leafy.moist_level_led->on();
+  //ADDING A NEW PLANT
+  /*
+  new_plant.moist_level_led->on();
+  */
   
   bitWrite(sr_data, FIRST_PLANT_MOIST_LED, first_plant.moist_level_led->get_state());
   bitWrite(sr_data, FIRST_PLANT_PUMP, first_plant.pump->get_state());
@@ -83,6 +102,11 @@ void setup() {
   bitWrite(sr_data, ANTHU_PUMP, first_plant.pump->get_state());
   bitWrite(sr_data, LEAFY_MOIST_LED, alovera.moist_level_led->get_state());
   bitWrite(sr_data, LEAFY_PUMP, alovera.pump->get_state());
+  //ADDING A NEW PLANT
+  /*
+   * bitWrite(sr_data, NEW_PLANT_MOIST_LED, new_plant.moist_level_led->get_state());
+   * bitWrite(sr_data, NEW_PLANT_PUMP, new_plant.pump->get_state());
+  */
   sr1.write_msb_first(sr_data, SHIFT_REG_NUM_BYTES);
   sr1.latch_data();  
   
@@ -94,6 +118,10 @@ void setup() {
   alovera.moist_level_led->off();
   anthu.moist_level_led->off();
   leafy.moist_level_led->off();
+  //ADDING A NEW PLANT
+  /*
+   * new_plant.moist_level_led->off();
+   */
   
   bitWrite(sr_data, FIRST_PLANT_MOIST_LED, first_plant.moist_level_led->get_state());
   bitWrite(sr_data, FIRST_PLANT_PUMP, first_plant.pump->get_state());
@@ -103,6 +131,11 @@ void setup() {
   bitWrite(sr_data, ANTHU_PUMP, first_plant.pump->get_state());
   bitWrite(sr_data, LEAFY_MOIST_LED, alovera.moist_level_led->get_state());
   bitWrite(sr_data, LEAFY_PUMP, alovera.pump->get_state());
+  //ADDING A NEW PLANT
+  /*
+   * bitWrite(sr_data, NEW_PLANT_MOIST_LED, new_plant.moist_level_led->get_state());
+   * bitWrite(sr_data, NEW_PLANT_PUMP, new_plant.pump->get_state());
+   */
   sr1.write_msb_first(sr_data, SHIFT_REG_NUM_BYTES);
   sr1.latch_data();
   
@@ -142,11 +175,21 @@ void loop() {
     else if(leafy.perform_watering_task()){
       Serial.println("Watering leafy");
     }
+    //ADDING A NEW PLANT
+    /*
+    else if(new_plant.perform_watering_task()){
+      Serial.println("Watering new_plant");
+    }
+    */
   }
   first_plant.update_moisture_led();
   alovera.update_moisture_led();
   anthu.update_moisture_led();
   leafy.update_moisture_led();
+  //ADDING A NEW PLANT
+  /*
+  new_plant.update_moisture_led();
+  */
   //Serial.println("");
   /*plant watering end*/
 
@@ -234,6 +277,25 @@ void loop() {
     } else if(incoming_cmd == "lef_mwt"){
       leafy.set_manual_watering_trigger();
     }
+
+    //ADDING A NEW PLANT
+    /*
+    else if(incoming_cmd == "np_d"){
+      new_plant.watering_data();
+    } else if(incoming_cmd == "np_c"){
+      new_plant.config_data();
+    } else if(incoming_cmd == "np_ms"){
+      Serial.print("raw_sensor_data = ");
+      Serial.print(new_plant.get_mosture_level_raw_value());
+      Serial.print(" converted moisture % = ");
+      Serial.print(new_plant.get_moisture_level());
+      Serial.print(" continue_watering_till_hwm = ");
+      Serial.print(new_plant.continue_watering_till_hwm);
+      Serial.println("");
+    } else if(incoming_cmd == "np_mwt"){
+      new_plant.set_manual_watering_trigger();
+    }    
+    */
     
     Serial.println(); 
   }
@@ -246,6 +308,10 @@ void loop() {
     alovera.log_data();
     anthu.log_data();
     leafy.log_data();
+    //ADDING A NEW PLANT
+    /*
+    new_plant.log_data();
+    */
     last_log_mills = millis();
   }
 
@@ -268,6 +334,12 @@ void loop() {
 
   bitWrite(sr_data, LEAFY_MOIST_LED, leafy.moist_level_led->get_state());
   bitWrite(sr_data, LEAFY_PUMP, leafy.pump->get_state());
+
+  //ADDING A NEW PLANT
+  /*
+  bitWrite(sr_data, NEW_PLANT_MOIST_LED, new_plant.moist_level_led->get_state());
+  bitWrite(sr_data, NEW_PLANT_PUMP, new_plant.pump->get_state());
+  */
   
   sr1.write_msb_first(sr_data, SHIFT_REG_NUM_BYTES);
   sr1.latch_data();
