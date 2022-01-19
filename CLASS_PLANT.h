@@ -86,7 +86,7 @@ class PLANT{
       boolean soil_soak_time_done = (millis() - pump_on_mills) > soil_soak_duration;
       boolean moist_level_below_lwm = moist_level < moist_level_lwm;
       boolean moist_level_above_hwm = moist_level > moist_level_hwm;
-      continue_watering_till_hwm = started_watering & (!moist_level_above_hwm);
+      continue_watering_till_hwm = started_watering & !(pump->is_off() & soil_soak_time_done & moist_level_above_hwm); //Avoid reading bad or sudden burts of high moisture sensor data
 
       //water the plant
       if(pump->is_off() & ((soil_soak_time_done & (moist_level_below_lwm || continue_watering_till_hwm))

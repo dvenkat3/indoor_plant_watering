@@ -163,24 +163,50 @@ void loop() {
 
   /*plant watering begin*/
   if(water_level > WATER_LEVEL_LWM){
-    if(first_plant.perform_watering_task()){
-      Serial.println("Watering first_plant");
-    }
-    else if(alovera.perform_watering_task()){
-      Serial.println("Watering alovera");
-    }
-    else if(anthu.perform_watering_task()){
-      Serial.println("Watering anthu");
-    }
-    else if(leafy.perform_watering_task()){
-      Serial.println("Watering leafy");
+
+    boolean first_plant_watering_started = first_plant.perform_watering_task();
+
+    //Single power source means running more than one pump will take power away from the Uno/sensors causing bad things to happen
+    //Workaround to ensure just one plant is being serviced at any given time. Thus only one pump can be ON at any given time
+    if(first_plant.pump->is_on()) {
+      first_plant.perform_watering_task();
+    } 
+    else if(alovera.pump->is_on()) {
+      alovera.perform_watering_task();
+    } 
+    else if(anthu.pump->is_on()) {
+      anthu.perform_watering_task();
+    } 
+    else if(leafy.pump->is_on()) {
+      leafy.perform_watering_task();
     }
     //ADDING A NEW PLANT
     /*
-    else if(new_plant.perform_watering_task()){
-      Serial.println("Watering new_plant");
+    else if(new_plant.pump->is_on()){
+       new_plant.perform_watering_task();
     }
     */
+    else {
+      if(first_plant.perform_watering_task()){
+        Serial.println("Watering first_plant");
+      }
+      else if(alovera.perform_watering_task()){
+        Serial.println("Watering alovera");
+      }
+      else if(anthu.perform_watering_task()){
+        Serial.println("Watering anthu");
+      }
+      else if(leafy.perform_watering_task()){
+        Serial.println("Watering leafy");
+      }
+      //ADDING A NEW PLANT
+      /*
+      else if(new_plant.perform_watering_task()){
+        Serial.println("Watering new_plant");
+      }
+      */
+    }
+
   }
   first_plant.update_moisture_led();
   alovera.update_moisture_led();
