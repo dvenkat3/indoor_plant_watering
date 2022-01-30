@@ -50,11 +50,16 @@ PLANT new_plant (NEW_PLANT_MOIST_LED,
 */
 
 unsigned long last_log_mills;
+boolean watering_enabled;
+unsigned long debug_count;
 
 void setup() {
+ 
   //initialize variables
   last_log_mills = 0;
   sr_data = SHIFT_REG_INIT_STATE;
+  watering_enabled = 0;
+  debug_count = 0;
 
   //Check all LEDs are working
   //OFF
@@ -156,18 +161,17 @@ void loop() {
     delay(50);
     water_level_led.off();
     delay(50);
+  } else if(!watering_enabled){
+    water_level_led.on();
   } else {
     water_level_led.off();
   }
   /*Water level tracking and indication end*/
 
   /*plant watering begin*/
-  if(water_level > WATER_LEVEL_LWM){
-
-    boolean first_plant_watering_started = first_plant.perform_watering_task();
-
-    //Single power source means running more than one pump will take power away from the Uno/sensors causing bad things to happen
-    //Workaround to ensure just one plant is being serviced at any given time. Thus only one pump can be ON at any given time
+  //This is an optimization to ensure only one relay & pump is ON at any given time. 
+  //Plans that need water will get them sequentially
+  if((water_level > WATER_LEVEL_LWM) & watering_enabled){
     if(first_plant.pump->is_on()) {
       first_plant.perform_watering_task();
     } 
@@ -206,11 +210,16 @@ void loop() {
       }
       */
     }
-
   }
+  
+  //Serial.print("debug_count");
+  //Serial.println(debug_count++);
   first_plant.update_moisture_led();
+  //Serial.print("alovera ");
   alovera.update_moisture_led();
+  //Serial.print("anthu ");
   anthu.update_moisture_led();
+  //Serial.print("leafy ");
   leafy.update_moisture_led();
   //ADDING A NEW PLANT
   /*
@@ -230,6 +239,14 @@ void loop() {
     } else if(incoming_cmd == "wl"){
       Serial.print("water level = ");
       Serial.println(water_level_sen.get_reading());
+    } else if(incoming_cmd == "wat_d"){
+      watering_enabled = 0;
+      Serial.print("Setting watering_enabled = ");
+      Serial.println(watering_enabled);      
+    } else if(incoming_cmd == "wat_e"){
+      watering_enabled = 1;
+      Serial.print("Setting watering_enabled = ");
+      Serial.println(watering_enabled);      
     } else if(incoming_cmd == "help"){
       Serial.println("wl - water level");
       Serial.println("cm - currnet millis");
@@ -245,13 +262,7 @@ void loop() {
     } else if(incoming_cmd == "p1_c"){
       first_plant.config_data();
     } else if(incoming_cmd == "p1_ms"){
-      Serial.print("raw_sensor_data = ");
-      Serial.print(first_plant.get_mosture_level_raw_value());
-      Serial.print(" converted moisture % = ");
-      Serial.print(first_plant.get_moisture_level());
-      Serial.print(" continue_watering_till_hwm = ");
-      Serial.print(first_plant.continue_watering_till_hwm);
-      Serial.println("");
+      first_plant.moisture_data();
     } else if(incoming_cmd == "p1_mwt"){
       first_plant.set_manual_watering_trigger();
     }
@@ -261,13 +272,7 @@ void loop() {
     } else if(incoming_cmd == "alo_c"){
       alovera.config_data();
     } else if(incoming_cmd == "alo_ms"){
-      Serial.print("raw_sensor_data = ");
-      Serial.print(alovera.get_mosture_level_raw_value());
-      Serial.print(" converted moisture % = ");
-      Serial.print(alovera.get_moisture_level());
-      Serial.print(" continue_watering_till_hwm = ");
-      Serial.print(alovera.continue_watering_till_hwm);
-      Serial.println("");
+      alovera.moisture_data();
     } else if(incoming_cmd == "alo_mwt"){
       alovera.set_manual_watering_trigger();
     }
@@ -277,13 +282,7 @@ void loop() {
     } else if(incoming_cmd == "ant_c"){
       anthu.config_data();
     } else if(incoming_cmd == "ant_ms"){
-      Serial.print("raw_sensor_data = ");
-      Serial.print(anthu.get_mosture_level_raw_value());
-      Serial.print(" converted moisture % = ");
-      Serial.print(anthu.get_moisture_level());
-      Serial.print(" continue_watering_till_hwm = ");
-      Serial.print(anthu.continue_watering_till_hwm);
-      Serial.println("");
+      anthu.moisture_data();
     } else if(incoming_cmd == "ant_mwt"){
       anthu.set_manual_watering_trigger();
     }
@@ -293,13 +292,7 @@ void loop() {
     } else if(incoming_cmd == "lef_c"){
       leafy.config_data();
     } else if(incoming_cmd == "lef_ms"){
-      Serial.print("raw_sensor_data = ");
-      Serial.print(leafy.get_mosture_level_raw_value());
-      Serial.print(" converted moisture % = ");
-      Serial.print(leafy.get_moisture_level());
-      Serial.print(" continue_watering_till_hwm = ");
-      Serial.print(leafy.continue_watering_till_hwm);
-      Serial.println("");
+      anthu.moisture_data();
     } else if(incoming_cmd == "lef_mwt"){
       leafy.set_manual_watering_trigger();
     }
@@ -311,13 +304,7 @@ void loop() {
     } else if(incoming_cmd == "np_c"){
       new_plant.config_data();
     } else if(incoming_cmd == "np_ms"){
-      Serial.print("raw_sensor_data = ");
-      Serial.print(new_plant.get_mosture_level_raw_value());
-      Serial.print(" converted moisture % = ");
-      Serial.print(new_plant.get_moisture_level());
-      Serial.print(" continue_watering_till_hwm = ");
-      Serial.print(new_plant.continue_watering_till_hwm);
-      Serial.println("");
+      anthu.moisture_data();
     } else if(incoming_cmd == "np_mwt"){
       new_plant.set_manual_watering_trigger();
     }    

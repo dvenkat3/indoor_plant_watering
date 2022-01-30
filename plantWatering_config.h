@@ -1,16 +1,11 @@
 #ifndef _plantWatering_pin_config_H
 #define _plantWatering_pin_config_H
 
-//This to note. 
-//Ensure SOAK time is not same across multiple plants (Minimum of 1min apart).
-//  Multiple pumps turning on at the same time will take power away from the arduino and cause shitty behaviour
-
-
 //Water reservoir
 #define WATER_LEVEL_SEN 0
 #define WATER_LEVEL_SEN_UC_IN A0
 #define WATER_LEVEL_LED 9
-#define WATER_LEVEL_LWM 55
+#define WATER_LEVEL_LWM 60
 
 //First plant (1) ------------------ 
 #define FIRST_PLANT_MOIST_LED 0
@@ -22,7 +17,7 @@
 
 #define FIRST_PLANT_MOIST_LEVEL_LWM 15
 #define FIRST_PLANT_MOIST_LEVEL_HWM 80
-#define FIRST_PLANT_PUMP_ON_DURATION_MS 3000 //3s in ms 
+#define FIRST_PLANT_PUMP_ON_DURATION_MS 2000 //2s in ms 
 #define FIRST_PLANT_SOIL_SOAK_DURATION_MS 300000 //5min in ms
 
 //Alovera (2) ------------------ 
@@ -35,7 +30,7 @@
 
 #define ALOVERA_MOIST_LEVEL_LWM 15
 #define ALOVERA_MOIST_LEVEL_HWM 65
-#define ALOVERA_PUMP_ON_DURATION_MS 2000 //3s in ms 
+#define ALOVERA_PUMP_ON_DURATION_MS 2000 //2s in ms 
 #define ALOVERA_SOIL_SOAK_DURATION_MS 360000 //6min in ms
 
 //Anthurium (3) ------------------
@@ -48,7 +43,7 @@
 
 #define ANTHU_MOIST_LEVEL_LWM 25
 #define ANTHU_MOIST_LEVEL_HWM 95
-#define ANTHU_PUMP_ON_DURATION_MS 4000 //4s in ms 
+#define ANTHU_PUMP_ON_DURATION_MS 3000 //3s in ms 
 #define ANTHU_SOIL_SOAK_DURATION_MS 480000 //8min in ms
 
 //LEAFY (4) ------------------
@@ -61,7 +56,7 @@
 
 #define LEAFY_MOIST_LEVEL_LWM 15
 #define LEAFY_MOIST_LEVEL_HWM 70
-#define LEAFY_PUMP_ON_DURATION_MS 3000 //4s in ms 
+#define LEAFY_PUMP_ON_DURATION_MS 3000 //3s in ms 
 #define LEAFY_SOIL_SOAK_DURATION_MS 420000 //7min in ms
 
 //ADDING A NEW PLANT

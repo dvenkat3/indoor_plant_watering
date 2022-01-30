@@ -17,6 +17,7 @@ class PLANT{
     unsigned long pump_on_mills;
     unsigned long soil_soak_duration;
     boolean continue_watering_till_hwm;
+    boolean soil_soak_time_done;
     int eeprom_addr_begin, eeprom_addr_end;
     int eeprom_addr_current; int log_number;
     byte num_pump_on;
@@ -72,10 +73,7 @@ class PLANT{
       } else {
         moist_level_led->off();
       }
-      //Serial.print(" moi pin = ");
-      //Serial.print(moist_level_sen->get_pin_number());
-      //Serial.print(" moi level = ");
-      //Serial.print(moist_level);
+      //Serial.println(get_moisture_level());
     }
 
     boolean perform_watering_task(){
@@ -83,7 +81,7 @@ class PLANT{
       int moist_level = get_moisture_level();
 
       //check if soild soak time is done
-      boolean soil_soak_time_done = (millis() - pump_on_mills) > soil_soak_duration;
+      soil_soak_time_done = (millis() - pump_on_mills) > soil_soak_duration;
       boolean moist_level_below_lwm = moist_level < moist_level_lwm;
       boolean moist_level_above_hwm = moist_level > moist_level_hwm;
       continue_watering_till_hwm = started_watering & !(pump->is_off() & soil_soak_time_done & moist_level_above_hwm); //Avoid reading bad or sudden burts of high moisture sensor data
@@ -198,6 +196,17 @@ class PLANT{
       
       Serial.print("SET SOIL SOAK DURATION = ");
       Serial.println(soil_soak_duration);
+    }
+
+    void moisture_data(){
+      Serial.print("raw_sensor_data = ");
+      Serial.print(get_mosture_level_raw_value());
+      Serial.print(" converted moisture % = ");
+      Serial.print(get_moisture_level());
+      Serial.print(" continue_watering_till_hwm = ");
+      Serial.print(continue_watering_till_hwm);
+      Serial.print(" soil_soak_time_done = ");
+      Serial.print(soil_soak_time_done);     
     }
 
 };
